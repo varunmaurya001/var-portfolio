@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Varun Maurya — Data Analyst</title>
+<meta name="description" content="Varun Maurya — Data Analyst. Python, SQL, Power BI, Excel, EDA, ETL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --black:#050506;
+  --panel:#0c0c12;
+  --panel-2:#111118;
+  --purple:#8b6bff;
+  --blue:#4d8dff;
+  --cyan:#34e6d8;
+  --text:#f2f1f7;
+  --muted:#8d8d9c;
+  --line:rgba(242,241,247,0.08);
+  --glass:rgba(255,255,255,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+::selection{background:var(--purple);color:#fff;}
+body{
+  background:var(--black);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  cursor:default;
+  position:relative;
+}
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:var(--black);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--purple),var(--cyan));border-radius:10px;}
+
+.mono{font-family:'JetBrains Mono',monospace;}
+.display{font-family:'Bricolage Grotesque',sans-serif;}
+
+/* ---------- Ambient background ---------- */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+.spotlight{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(139,107,255,0.10), transparent 60%);
+  transition:background 0.05s linear;
+}
+.grain{
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Nav ---------- */
+nav{
+  position:fixed;top:22px;left:50%;transform:translateX(-50%);
+  z-index:100;
+  display:flex;align-items:center;gap:4px;
+  background:rgba(12,12,18,0.6);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border:1px solid var(--line);
+  border-radius:100px;
+  padding:8px 8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+nav a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:0.02em;
+  padding:9px 16px;
+  border-radius:100px;
+  transition:color 0.3s ease, background 0.3s ease;
+  white-space:nowrap;
+}
+nav a:hover{color:var(--text);background:rgba(255,255,255,0.06);}
+nav .nav-cta{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff !important;
+  margin-left:4px;
+}
+
+/* ---------- Sections generic ---------- */
+section{
+  position:relative;z-index:5;
+  padding:160px 8vw;
+  max-width:1400px;margin:0 auto;
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--cyan);
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:22px;
+}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--cyan);}
+h2.section-title{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:clamp(34px,5vw,62px);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1.05;
+  margin-bottom:20px;
+}
+.section-sub{
+  color:var(--muted);
+  font-size:17px;
+  max-width:560px;
+  line-height:1.6;
+  margin-bottom:64px;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding-top:120px;
+  position:relative;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.3fr 0.7fr;gap:40px;align-items:center;width:100%;
+}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--muted);letter-spacing:0.1em;
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+.quick-contact{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.qc-pill{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);
+  text-decoration:none;
+  background:var(--glass);border:1px solid var(--line);border-radius:100px;
+  padding:9px 16px;display:inline-flex;align-items:center;gap:6px;
+  transition:all 0.3s ease;
+}
+.qc-pill:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+.hero-name{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  font-size:clamp(56px,9.5vw,158px);
+  line-height:0.92;
+  letter-spacing:-0.03em;
+  background:linear-gradient(120deg,#fff 20%,var(--purple) 45%,var(--cyan) 65%,#fff 85%);
+  background-size:300% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shine 7s linear infinite;
+  filter:drop-shadow(0 0 40px rgba(139,107,255,0.25));
+}
+@keyframes shine{to{background-position:300% center;}}
+.hero-role{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(16px,2vw,22px);
+  color:var(--cyan);
+  margin-top:22px;
+  letter-spacing:0.05em;
+  min-height:32px;
+}
+.hero-role .cursor-blink{opacity:1;animation:blink 1s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.hero-desc{
+  color:var(--muted);
+  font-size:17px;line-height:1.7;
+  max-width:520px;margin-top:26px;
+}
+.hero-actions{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;}
+.btn{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+  padding:15px 28px;border-radius:100px;
+  border:1px solid var(--line);
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:transform 0.35s cubic-bezier(.2,.9,.3,1), box-shadow 0.35s ease, background 0.35s ease;
+  position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff;border:none;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(139,107,255,0.4);}
+.btn-ghost{color:var(--text);background:var(--glass);backdrop-filter:blur(10px);}
+.btn-ghost:hover{transform:translateY(-3px);background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);}
+
+.hero-stats{display:flex;gap:36px;margin-top:56px;}
+.hero-stat b{
+  font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:700;
+  display:block;background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-stat span{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;}
+
+.hero-visual{
+  position:relative;height:520px;
+}
+.orbit-card{
+  position:absolute;inset:0;margin:auto;width:280px;height:340px;
+  background:linear-gradient(160deg,rgba(139,107,255,0.12),rgba(52,230,216,0.06));
+  border:1px solid var(--line);
+  border-radius:24px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  display:flex;flex-direction:column;justify-content:space-between;padding:26px;
+  transform-style:preserve-3d;
+}
+.orbit-card .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:0.1em;}
+.orbit-card .big-stat{font-family:'Bricolage Grotesque',sans-serif;font-size:52px;font-weight:800;}
+.orbit-card .cap{color:var(--muted);font-size:13px;line-height:1.5;}
+.mini-orb{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent 60%), linear-gradient(135deg,var(--purple),var(--blue));
+  filter:blur(0.3px);
+  box-shadow:0 0 30px rgba(139,107,255,0.5);
+}
+.ring{
+  position:absolute;inset:0;margin:auto;border:1px solid rgba(139,107,255,0.18);border-radius:50%;
+}
+
+.scroll-hint{
+  position:absolute;bottom:36px;left:8vw;
+  display:flex;align-items:center;gap:10px;
+  color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;
+}
+.scroll-line{width:1px;height:34px;background:linear-gradient(var(--cyan),transparent);animation:scrolldown 1.8s infinite;}
+@keyframes scrolldown{0%{opacity:0;transform:translateY(-6px);}50%{opacity:1;}100%{opacity:0;transform:translateY(10px);}}
+
+/* ---------- Marquee ---------- */
+.marquee-wrap{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:22px 0;overflow:hidden;position:relative;z-index:5;background:var(--panel);
+}
+.marquee{display:flex;gap:60px;white-space:nowrap;animation:marquee 26s linear infinite;width:max-content;}
+.marquee span{
+  font-family:'Bricolage Grotesque',sans-serif;font-size:16px;color:var(--muted);
+  display:flex;align-items:center;gap:60px;letter-spacing:0.02em;
+}
+.marquee span b{color:var(--text);font-weight:600;}
+.marquee span::after{content:'◆';color:var(--purple);margin-left:60px;font-size:10px;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ---------- Skills orbit ---------- */
+.skills-stage{
+  position:relative;height:480px;
+  border-radius:28px;
+  border:1px solid var(--line);
+  background:radial-gradient(ellipse at center, rgba(139,107,255,0.06), transparent 70%), var(--panel);
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.skill-track{
+  display:flex;gap:18px;
+  animation:scrollLeft 34s linear infinite;
+  width:max-content;
+}
+.skills-stage .skill-row{position:absolute;width:100%;}
+.skill-row:nth-child(1){top:14%;}
+.skill-row:nth-child(2){top:44%;}
+.skill-row:nth-child(3){top:74%;}
+.skill-row:nth-child(2) .skill-track{animation-direction:reverse;animation-duration:40s;}
+.skill-row:nth-child(3) .skill-track{animation-duration:30s;}
+.skill-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;font-weight:500;
+  padding:14px 26px;border-radius:14px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  white-space:nowrap;
+  transition:transform 0.4s ease, border-color 0.4s ease, box-shadow .4s ease, color .4s ease;
+  color:var(--muted);
+}
+.skill-pill:hover{
+  transform:translateY(-6px) scale(1.05);
+  border-color:var(--cyan);
+  color:var(--text);
+  box-shadow:0 14px 30px rgba(52,230,216,0.15);
+}
+@keyframes scrollLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.stage-glow{position:absolute;width:340px;height:340px;background:var(--purple);filter:blur(140px);opacity:0.18;border-radius:50%;pointer-events:none;}
+
+/* ---------- Timeline ---------- */
+.timeline{position:relative;margin-top:10px;}
+.timeline::before{
+  content:'';position:absolute;left:19px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(var(--purple),var(--cyan),transparent);
+}
+.tl-item{position:relative;padding-left:60px;margin-bottom:56px;opacity:0;transform:translateY(30px);}
+.tl-dot{
+  position:absolute;left:11px;top:4px;width:17px;height:17px;border-radius:50%;
+  background:var(--black);border:2px solid var(--cyan);
+  box-shadow:0 0 0 5px rgba(52,230,216,0.08);
+}
+.tl-item .tl-date{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:12px;letter-spacing:0.08em;margin-bottom:8px;display:block;}
+.tl-item h3{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px;}
+.tl-item .tl-org{color:var(--muted);font-size:14px;margin-bottom:12px;}
+.tl-item p{color:var(--muted);font-size:15px;line-height:1.7;max-width:640px;}
+.tl-tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.tl-tags span{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 12px;border-radius:8px;background:var(--glass);border:1px solid var(--line);color:var(--muted);}
+
+/* ---------- Projects ---------- */
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;}
+.proj-card{
+  position:relative;
+  background:linear-gradient(160deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:32px;
+  overflow:hidden;
+  transition:transform 0.15s ease, border-color 0.4s ease;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.proj-card::before{
+  content:'';position:absolute;inset:0;border-radius:22px;padding:1px;
+  background:linear-gradient(135deg,var(--purple),transparent 40%, var(--cyan));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity 0.4s ease;pointer-events:none;
+}
+.proj-card:hover::before{opacity:0.7;}
+.proj-card:hover{border-color:transparent;}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;}
+.proj-index{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+.proj-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 8px 24px rgba(139,107,255,0.35);
+}
+.proj-card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:23px;font-weight:700;margin-bottom:10px;}
+.proj-card p{color:var(--muted);font-size:14.5px;line-height:1.65;margin-bottom:20px;}
+.proj-stack{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.proj-stack span{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 11px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--cyan);}
+.proj-metrics{display:flex;gap:24px;padding-top:18px;border-top:1px solid var(--line);}
+.proj-metrics div b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;}
+.proj-metrics div span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* ---------- Data viz ---------- */
+.viz-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.viz-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px;
+}
+.viz-card h4{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;}
+.viz-card h4 .mono{font-size:11px;color:var(--muted);}
+.bars{display:flex;align-items:flex-end;gap:10px;height:180px;}
+.bar{
+  flex:1;border-radius:8px 8px 0 0;
+  background:linear-gradient(180deg,var(--cyan),var(--purple));
+  height:0;position:relative;
+  box-shadow:0 -6px 20px rgba(52,230,216,0.15);
+}
+.bar-label{position:absolute;bottom:-24px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:28px;}
+.donut{width:150px;height:150px;border-radius:50%;position:relative;
+  background:conic-gradient(var(--purple) 0deg, var(--purple) var(--a1,140deg), var(--cyan) var(--a1,140deg), var(--cyan) var(--a2,250deg), var(--blue) var(--a2,250deg), var(--blue) 360deg);
+}
+.donut::after{content:'';position:absolute;inset:20px;border-radius:50%;background:var(--panel);}
+.donut-legend div{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
+.dot{width:9px;height:9px;border-radius:2px;}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+.kpi{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:14px;padding:18px;}
+.kpi b{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;display:block;}
+.kpi span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.line-chart{width:100%;height:120px;}
+
+/* ---------- Achievements ---------- */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.stat-box{
+  background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:34px 26px;text-align:left;
+  position:relative;overflow:hidden;
+}
+.stat-box::after{content:'';position:absolute;top:-40%;right:-40%;width:160px;height:160px;background:var(--purple);filter:blur(70px);opacity:0.15;}
+.stat-box .num{font-family:'Bricolage Grotesque',sans-serif;font-size:46px;font-weight:800;background:linear-gradient(120deg,var(--text),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-box .lab{color:var(--muted);font-size:13px;margin-top:6px;font-family:'JetBrains Mono',monospace;}
+
+/* ---------- Certifications ---------- */
+.certs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+.cert-flip{perspective:1200px;height:190px;}
+.cert-inner{position:relative;width:100%;height:100%;transition:transform 0.7s cubic-bezier(.2,.9,.2,1);transform-style:preserve-3d;}
+.cert-flip:hover .cert-inner{transform:rotateY(180deg);}
+.cert-face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;padding:28px;display:flex;flex-direction:column;justify-content:space-between;}
+.cert-front{background:linear-gradient(150deg,var(--panel-2),var(--panel));border:1px solid var(--line);}
+.cert-back{background:linear-gradient(150deg,var(--purple),var(--blue));transform:rotateY(180deg);color:#fff;}
+.cert-front h4{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;}
+.cert-front .org{color:var(--muted);font-size:13px;margin-top:6px;}
+.cert-badge{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.cert-back p{font-size:13.5px;line-height:1.6;}
+
+/* ---------- Vault ---------- */
+.vault-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:36px;}
+.lock-btn{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:0.04em;
+  background:var(--glass);border:1px solid var(--line);color:var(--muted);
+  padding:12px 18px;border-radius:100px;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  transition:all 0.3s ease;white-space:nowrap;
+}
+.lock-btn:hover{border-color:var(--cyan);color:var(--text);}
+.lock-btn.unlocked{color:var(--cyan);border-color:var(--cyan);}
+.login-panel{
+  display:none;max-width:380px;
+  background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;
+  margin-bottom:32px;gap:0;
+}
+.login-panel.open{display:block;}
+.login-panel .btn{width:100%;justify-content:center;margin-top:4px;}
+.login-error{display:block;color:#ff6b6b;font-size:12.5px;margin-top:12px;font-family:'JetBrains Mono',monospace;min-height:16px;}
+.upload-panel{display:none;margin-bottom:32px;align-items:center;gap:16px;flex-wrap:wrap;}
+.upload-panel.open{display:flex;}
+.upload-drop{
+  font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);
+  border:1px dashed var(--line);border-radius:16px;padding:22px 26px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;transition:all 0.3s ease;
+}
+.upload-drop:hover{border-color:var(--cyan);color:var(--text);background:rgba(52,230,216,0.04);}
+.upload-drop span{font-size:18px;color:var(--cyan);}
+.upload-status{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);}
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
+.doc-empty{color:var(--muted);font-size:14px;font-family:'JetBrains Mono',monospace;padding:40px 0;grid-column:1/-1;text-align:center;border:1px dashed var(--line);border-radius:16px;}
+.doc-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;
+  display:flex;flex-direction:column;gap:14px;position:relative;transition:transform 0.3s ease,border-color .3s ease;
+}
+.doc-card:hover{transform:translateY(-4px);border-color:rgba(52,230,216,0.3);}
+.doc-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.doc-name{font-size:14px;font-weight:600;word-break:break-word;}
+.doc-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+.doc-actions{display:flex;gap:8px;margin-top:auto;}
+.doc-actions a, .doc-actions button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;border-radius:8px;
+  border:1px solid var(--line);background:var(--glass);color:var(--text);text-decoration:none;cursor:pointer;
+  transition:all 0.3s ease;
+}
+.doc-actions a:hover{border-color:var(--cyan);color:var(--cyan);}
+.doc-actions button.doc-del{color:#ff6b6b;}
+.doc-actions button.doc-del:hover{border-color:#ff6b6b;}
+
+/* ---------- Contact ---------- */
+.contact-panel{
+  background:linear-gradient(160deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line);border-radius:28px;padding:60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:50px;
+  position:relative;overflow:hidden;
+}
+.contact-panel::before{content:'';position:absolute;top:-30%;left:-10%;width:400px;height:400px;background:var(--purple);filter:blur(160px);opacity:0.2;}
+.contact-left h2{font-size:clamp(30px,4vw,44px);}
+.contact-links{display:flex;flex-direction:column;gap:14px;margin-top:34px;}
+.contact-links a{
+  display:flex;align-items:center;justify-content:space-between;
+  color:var(--text);text-decoration:none;font-size:15px;font-weight:500;
+  padding:16px 20px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,0.02);
+  transition:all 0.35s ease;
+}
+.contact-links a:hover{border-color:var(--cyan);background:rgba(52,230,216,0.06);transform:translateX(6px);}
+.contact-links a .arrow{color:var(--cyan);}
+.form-group{margin-bottom:18px;}
+.form-group input, .form-group textarea{
+  width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:12px;
+  padding:15px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;
+  transition:border-color 0.3s ease, background 0.3s ease;
+}
+.form-group input:focus, .form-group textarea:focus{border-color:var(--cyan);background:rgba(255,255,255,0.05);}
+.form-group textarea{resize:vertical;min-height:100px;}
+.send-btn{width:100%;justify-content:center;margin-top:6px;}
+
+/* ---------- Footer ---------- */
+footer{
+  position:relative;z-index:5;padding:60px 8vw 40px;
+  border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+}
+footer .foot-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;}
+.foot-social{display:flex;gap:10px;}
+.foot-social a{
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;
+  font-size:13px;transition:all 0.3s ease;
+}
+.foot-social a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-4px);}
+.back-top{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
+  font-size:16px;transition:transform 0.3s ease;
+}
+.back-top:hover{transform:translateY(-6px);}
+
+/* reveal utility */
+.reveal{opacity:0;transform:translateY(40px);}
+
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr;}
+  .hero-visual{display:none;}
+  .projects-grid{grid-template-columns:1fr;}
+  .viz-grid{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .certs-grid{grid-template-columns:1fr;}
+  .contact-panel{grid-template-columns:1fr;padding:36px;}
+  nav{display:none;}
+  section{padding:100px 6vw;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="spotlight" id="spotlight"></div>
+<div class="grain"></div>
+
+<nav>
+  <a href="#hero">Home</a>
+  <a href="#skills">Skills</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#certs">Certs</a>
+  <a href="#vault">Documents</a>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow"><span class="status-dot"></span> AVAILABLE FOR DATA ANALYST ROLES — NCR / REMOTE</div>
+      <div class="quick-contact">
+        <a href="mailto:mauryavarun016@gmail.com" class="qc-pill">✉️ mauryavarun016@gmail.com</a>
+        <a href="tel:+918726907810" class="qc-pill">📞 +91 87269 07810</a>
+      </div>
+      <h1 class="hero-name" id="heroName">VARUN<br>MAURYA</h1>
+      <div class="hero-role mono" id="roleType"></div>
+      <p class="hero-desc">I turn messy spreadsheets and raw databases into dashboards people actually act on. Python, SQL and Power BI are my instruments — EDA, ETL and DAX are the language I think in. Ducat-certified Data Scientist, Office Master in Power BI.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View Projects →</a>
+        <a href="tel:+918726907810" class="btn btn-ghost">📞 Call Me</a>
+        <a href="https://wa.me/918726907810" target="_blank" rel="noopener" class="btn btn-ghost">💬 WhatsApp</a>
+        <a href="#contact" class="btn btn-ghost">Download Résumé</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>5+</b><span>DASHBOARDS SHIPPED</span></div>
+        <div class="hero-stat"><b>29L+</b><span>ROWS ANALYZED</span></div>
+        <div class="hero-stat"><b>2</b><span>CERTIFICATIONS</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="ring" style="width:420px;height:420px;"></div>
+      <div class="ring" style="width:320px;height:320px;"></div>
+      <div class="mini-orb" id="orb1" style="width:20px;height:20px;top:8%;left:20%;"></div>
+      <div class="mini-orb" id="orb2" style="width:14px;height:14px;top:70%;left:10%;"></div>
+      <div class="mini-orb" id="orb3" style="width:10px;height:10px;top:20%;left:80%;"></div>
+      <div class="orbit-card" id="orbitCard">
+        <div class="tag">// LIVE_METRIC</div>
+        <div>
+          <div class="big-stat">98.4%</div>
+          <div class="cap">Data cleaning accuracy across production Excel &amp; SQL pipelines</div>
+        </div>
+        <div class="tag">PYTHON · SQL · POWER BI</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div> SCROLL TO EXPLORE</div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span><b>Python</b> · SQL · Power BI · DAX · Power Query · Advanced Excel · EDA · ETL · BeautifulSoup <b>Python</b> · SQL · Power BI · DAX · Power Query · Advanced Excel · EDA · ETL · BeautifulSoup</span>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="eyebrow reveal">Toolkit</div>
+  <h2 class="section-title reveal">The instruments I build with.</h2>
+  <p class="section-sub reveal">A stack shaped by real projects — cleaning production data, modelling it, and shipping dashboards people open every day.</p>
+
+  <div class="skills-stage reveal">
+    <div class="stage-glow" style="top:10%;left:0;"></div>
+    <div class="stage-glow" style="bottom:0;right:0;background:var(--cyan);"></div>
+    <div style="position:relative;width:100%;height:100%;">
+      <div class="skill-row">
+        <div class="skill-track" id="track1"></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-track" id="track2"></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-track" id="track3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="eyebrow reveal">Journey</div>
+  <h2 class="section-title reveal">Experience &amp; Education</h2>
+  <p class="section-sub reveal">From coursework to shipped, production-ready dashboards and applications.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-date mono">2024 — PRESENT</span>
+      <h3>Independent Data Analyst / Freelance</h3>
+      <div class="tl-org">Remote · Fiverr &amp; direct client work</div>
+      <p>Delivering Excel data cleaning, Power BI dashboards and fully local, privacy-first Python automation pipelines for small businesses and individual clients.</p>
+      <div class="tl-tags"><span>Power BI</span><span>Python</span><span>Client delivery</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-date mono">CERTIFICATION</span>
+      <h3>Data Science Program</h3>
+      <div class="tl-org">Ducat, Noida</div>
+      <p>Hands-on training across Python, statistics, SQL and machine learning fundamentals — capstone projects included EDA and predictive modelling.</p>
+      <div class="tl-tags"><span>Python</span><span>Statistics</span><span>ML Basics</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <span class="tl-date mono">CERTIFICATION</span>
+      <h3>Power BI Developer</h3>
+      <div class="tl-org">Office Master</h3>
+      <p>Advanced DAX, Power Query and data modelling to build enterprise-grade, interactive dashboards.</p>
+      <div class="tl-tags"><span>DAX</span><span>Power Query</span><span>Dashboards</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="eyebrow reveal">Selected Work</div>
+  <h2 class="section-title reveal">Projects that ship, not just render.</h2>
+  <p class="section-sub reveal">Each one starts with messy real-world data and ends with something a stakeholder can actually use.</p>
+
+  <div class="projects-grid">
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">01 / DASHBOARD</span><div class="proj-icon">📊</div></div>
+      <h3>HR Attrition Analysis Dashboard</h3>
+      <p>An interactive Power BI dashboard uncovering the drivers behind employee attrition — department, tenure and compensation cut across dynamic filters.</p>
+      <div class="proj-stack"><span>Power BI</span><span>DAX</span><span>Data Modelling</span></div>
+      <div class="proj-metrics">
+        <div><b>12+</b><span>VISUALS</span></div>
+        <div><b>6</b><span>KEY KPIs</span></div>
+        <div><b>RLS</b><span>SECURITY</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">02 / ANALYSIS</span><div class="proj-icon">☕</div></div>
+      <h3>Coffee Sales Analysis Dashboard</h3>
+      <p>Cleaned and modelled 143,000+ transaction records in Excel to surface seasonal sales trends, top products and regional performance.</p>
+      <div class="proj-stack"><span>Excel</span><span>Pivot Tables</span><span>Power Query</span></div>
+      <div class="proj-metrics">
+        <div><b>143K+</b><span>ROWS</span></div>
+        <div><b>8</b><span>REPORT VIEWS</span></div>
+        <div><b>100%</b><span>CLEANED</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">03 / EDA</span><div class="proj-icon">🏏</div></div>
+      <h3>Sachin Tendulkar ODI Career EDA</h3>
+      <p>Exploratory data analysis on two decades of ODI statistics — form trends, opposition-wise performance and career milestones visualised in Python.</p>
+      <div class="proj-stack"><span>Python</span><span>Pandas</span><span>Matplotlib</span></div>
+      <div class="proj-metrics">
+        <div><b>20+</b><span>YEARS DATA</span></div>
+        <div><b>15+</b><span>CHARTS</span></div>
+        <div><b>EDA</b><span>DEEP DIVE</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">04 / SCRAPER</span><div class="proj-icon">⚖️</div></div>
+      <h3>Supreme Court Judges Web Scraper</h3>
+      <p>An automated BeautifulSoup pipeline that extracts, structures and exports judicial records for downstream analysis.</p>
+      <div class="proj-stack"><span>Python</span><span>BeautifulSoup</span><span>Web Scraping</span></div>
+      <div class="proj-metrics">
+        <div><b>Auto</b><span>PIPELINE</span></div>
+        <div><b>CSV</b><span>EXPORT</span></div>
+        <div><b>100%</b><span>SCRIPTED</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">05 / DEEP LEARNING</span><div class="proj-icon">🧠</div></div>
+      <h3>Image Identification System</h3>
+      <p>A CNN built with TensorFlow &amp; Keras that classifies images across multiple categories, from data augmentation to trained inference.</p>
+      <div class="proj-stack"><span>TensorFlow</span><span>Keras</span><span>CNN</span></div>
+      <div class="proj-metrics">
+        <div><b>CNN</b><span>ARCHITECTURE</span></div>
+        <div><b>Multi</b><span>CLASS</span></div>
+        <div><b>Trained</b><span>MODEL</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">06 / PIPELINE</span><div class="proj-icon">🔒</div></div>
+      <h3>Local Data Analysis &amp; Report Generation Pipeline</h3>
+      <p>An end-to-end Python pipeline that ingests raw data, cleans it, runs full analysis, builds charts and auto-generates a formatted report — built to run entirely on a local machine with zero cloud calls, so sensitive data never leaves the laptop. Processed 12,50,000 rows of raw data — cleaned, analyzed, charted and reported in just 10 minutes.</p>
+      <div class="proj-stack"><span>Python</span><span>Pandas</span><span>100% Offline</span></div>
+      <div class="proj-metrics">
+        <div><b>12.5L</b><span>ROWS PROCESSED</span></div>
+        <div><b>10 min</b><span>TOTAL RUN TIME</span></div>
+        <div><b>0</b><span>DATA LEAK RISK</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-top"><span class="proj-index mono">07 / PIPELINE</span><div class="proj-icon">🗂️</div></div>
+      <h3>Local Excel Automation Pipeline</h3>
+      <p>A fully offline Excel pipeline that cleans raw workbooks, builds charts automatically and surfaces key insights — no internet connection, no uploads, no third-party servers. Every file stays on the client's own laptop from start to finish. Cleaned, analyzed and charted 15,00,000 rows of messy data in just 20 minutes.</p>
+      <div class="proj-stack"><span>Excel</span><span>Power Query</span><span>100% Offline</span></div>
+      <div class="proj-metrics">
+        <div><b>15L</b><span>ROWS PROCESSED</span></div>
+        <div><b>20 min</b><span>TOTAL RUN TIME</span></div>
+        <div><b>0</b><span>DATA LEAK RISK</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA VIZ -->
+<section id="viz">
+  <div class="eyebrow reveal">In Practice</div>
+  <h2 class="section-title reveal">Data, visualised.</h2>
+  <p class="section-sub reveal">A live snapshot of the kind of reporting I build for clients — every chart here renders on scroll.</p>
+
+  <div class="viz-grid">
+    <div class="viz-card reveal">
+      <h4>Quarterly Sales by Region <span class="mono">FY25–26</span></h4>
+      <div class="bars" id="barsChart">
+        <div class="bar" data-h="55" style="position:relative;"><span class="bar-label">Q1</span></div>
+        <div class="bar" data-h="72" style="position:relative;"><span class="bar-label">Q2</span></div>
+        <div class="bar" data-h="48" style="position:relative;"><span class="bar-label">Q3</span></div>
+        <div class="bar" data-h="90" style="position:relative;"><span class="bar-label">Q4</span></div>
+        <div class="bar" data-h="65" style="position:relative;"><span class="bar-label">Q5</span></div>
+        <div class="bar" data-h="82" style="position:relative;"><span class="bar-label">Q6</span></div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><b>+38%</b><span>YoY GROWTH</span></div>
+        <div class="kpi"><b>₹12.4L</b><span>TOTAL REVENUE</span></div>
+      </div>
+    </div>
+
+    <div class="viz-card reveal">
+      <h4>Data Source Mix <span class="mono">2026</span></h4>
+      <div class="donut-wrap">
+        <div class="donut" id="donutEl" style="--a1:0deg;--a2:0deg;"></div>
+        <div class="donut-legend">
+          <div><span class="dot" style="background:var(--purple);"></span> Excel / CSV — 39%</div>
+          <div><span class="dot" style="background:var(--cyan);"></span> SQL Databases — 31%</div>
+          <div><span class="dot" style="background:var(--blue);"></span> Web Scraped — 30%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="viz-card reveal">
+      <h4>Report Processing Time <span class="mono">Before vs After</span></h4>
+      <svg class="line-chart" id="lineChartSvg" viewBox="0 0 320 120" preserveAspectRatio="none">
+        <polyline id="lineBefore" fill="none" stroke="#8d8d9c" stroke-width="2" stroke-dasharray="600" stroke-dashoffset="600" points="0,30 55,45 110,25 165,55 220,35 275,60 320,40"/>
+        <polyline id="lineAfter" fill="none" stroke="#34e6d8" stroke-width="2.5" stroke-dasharray="600" stroke-dashoffset="600" points="0,95 55,90 110,100 165,85 220,92 275,80 320,88"/>
+      </svg>
+      <div class="kpi-row" style="grid-template-columns:1fr 1fr 1fr;margin-top:10px;">
+        <div class="kpi"><b>-82%</b><span>TIME SAVED</span></div>
+        <div class="kpi"><b>0 MB</b><span>DATA UPLOADED</span></div>
+        <div class="kpi"><b>100%</b><span>RUNS OFFLINE</span></div>
+      </div>
+    </div>
+
+    <div class="viz-card reveal">
+      <h4>Local Pipeline — Output Breakdown <span class="mono">Auto-generated</span></h4>
+      <div class="donut-wrap">
+        <div class="donut" id="donutEl2" style="--a1:0deg;--a2:0deg;background:conic-gradient(var(--cyan) 0deg, var(--cyan) var(--a1,0deg), var(--purple) var(--a1,0deg), var(--purple) var(--a2,0deg), var(--blue) var(--a2,0deg), var(--blue) 360deg);"></div>
+        <div class="donut-legend">
+          <div><span class="dot" style="background:var(--cyan);"></span> Charts &amp; Visuals — 45%</div>
+          <div><span class="dot" style="background:var(--purple);"></span> Summary Insights — 33%</div>
+          <div><span class="dot" style="background:var(--blue);"></span> Cleaned Dataset — 22%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="viz-card reveal">
+      <h4>Pipeline Health <span class="mono">Live Snapshot</span></h4>
+      <div class="kpi-row">
+        <div class="kpi"><b>0</b><span>CLOUD CALLS MADE</span></div>
+        <div class="kpi"><b>100%</b><span>RUNS ON-DEVICE</span></div>
+        <div class="kpi"><b>3.2s</b><span>AVG. RUN TIME</span></div>
+        <div class="kpi"><b>A+</b><span>DATA PRIVACY GRADE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="eyebrow reveal">By the Numbers</div>
+  <h2 class="section-title reveal">Impact, quantified.</h2>
+  <div class="stats-grid">
+    <div class="stat-box reveal"><div class="num" data-count="7">0</div><div class="lab">PROJECTS COMPLETED</div></div>
+    <div class="stat-box reveal"><div class="num" data-count="29">0</div><div class="lab">LAKH+ ROWS OF DATA CLEANED</div></div>
+    <div class="stat-box reveal"><div class="num" data-count="12">0</div><div class="lab">DASHBOARDS &amp; VISUALS BUILT</div></div>
+    <div class="stat-box reveal"><div class="num" data-count="2">0</div><div class="lab">PROFESSIONAL CERTIFICATIONS</div></div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="eyebrow reveal">Credentials</div>
+  <h2 class="section-title reveal">Certifications</h2>
+  <p class="section-sub reveal">Hover a card to flip it.</p>
+  <div class="certs-grid">
+    <div class="cert-flip reveal">
+      <div class="cert-inner">
+        <div class="cert-face cert-front">
+          <div class="cert-badge">🎓</div>
+          <div><h4>Data Science Certification</h4><div class="org">Ducat, Noida</div></div>
+        </div>
+        <div class="cert-face cert-back">
+          <div style="font-size:12px;opacity:0.8;font-family:'JetBrains Mono',monospace;">CURRICULUM</div>
+          <p>Python, statistics, SQL, machine learning fundamentals and applied EDA across real datasets.</p>
+        </div>
+      </div>
+    </div>
+    <div class="cert-flip reveal">
+      <div class="cert-inner">
+        <div class="cert-face cert-front">
+          <div class="cert-badge">📈</div>
+          <div><h4>Power BI Developer Certification</h4><div class="org">Office Master</div></div>
+        </div>
+        <div class="cert-face cert-back">
+          <div style="font-size:12px;opacity:0.8;font-family:'JetBrains Mono',monospace;">CURRICULUM</div>
+          <p>Advanced DAX, Power Query, data modelling and enterprise dashboard design.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VAULT -->
+<section id="vault">
+  <div class="vault-head reveal">
+    <div>
+      <div class="eyebrow">For Recruiters</div>
+      <h2 class="section-title">Documents &amp; Certificates</h2>
+      <p class="section-sub" style="margin-bottom:0;">Résumé, experience letters and certificates — open below, no login needed to view.</p>
+    </div>
+    <button class="lock-btn" id="lockBtn" type="button"><span id="lockIcon">🔒</span> <span id="lockLabel">Owner Login</span></button>
+  </div>
+
+  <div class="login-panel reveal" id="loginPanel">
+    <div class="form-group"><input type="text" id="vaultUser" placeholder="Username"></div>
+    <div class="form-group"><input type="password" id="vaultPass" placeholder="Password"></div>
+    <button class="btn btn-primary" id="loginSubmit" type="button">Unlock →</button>
+    <span class="login-error" id="loginError"></span>
+  </div>
+
+  <div class="upload-panel reveal" id="uploadPanel">
+    <label class="upload-drop" for="fileInput">
+      <span>＋</span> Click to upload résumé, certificates or experience letters
+      <input type="file" id="fileInput" multiple style="display:none;">
+    </label>
+    <span class="upload-status" id="uploadStatus"></span>
+  </div>
+
+  <div class="doc-grid reveal" id="docGrid">
+    <div class="doc-empty" id="docEmpty">No documents uploaded yet — check back soon.</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-panel reveal">
+    <div class="contact-left">
+      <div class="eyebrow" style="margin-bottom:14px;">Get in touch</div>
+      <h2>Let's turn your data into decisions.</h2>
+      <p style="color:var(--muted);margin-top:16px;font-size:15px;line-height:1.7;max-width:420px;">Open to Data Analyst, MIS Executive, Power BI Developer and Data Science roles across Delhi NCR and remote.</p>
+      <div class="contact-links">
+        <a href="mailto:mauryavarun016@gmail.com">Email Me <span class="arrow">→</span></a>
+        <a href="tel:+918726907810">Call Me <span class="arrow">→</span></a>
+        <a href="https://wa.me/918726907810" target="_blank" rel="noopener">WhatsApp <span class="arrow">→</span></a>
+        <a href="https://linkedin.com/in/varun-maurya-913444331" target="_blank" rel="noopener">LinkedIn <span class="arrow">→</span></a>
+        <a href="https://instagram.com/varun_14maurya" target="_blank" rel="noopener">Instagram <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group"><input type="text" placeholder="Your name"></div>
+      <div class="form-group"><input type="email" placeholder="Your email"></div>
+      <div class="form-group"><textarea placeholder="Tell me about the role or project..."></textarea></div>
+      <button class="btn btn-primary send-btn" type="button">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-name display">VARUN MAURYA <span class="mono" style="color:var(--muted);font-weight:400;font-size:12px;">— Data Analyst</span></div>
+  <div class="foot-social">
+    <a href="https://linkedin.com/in/varun-maurya-913444331" target="_blank" rel="noopener">in</a>
+    <a href="https://instagram.com/varun_14maurya" target="_blank" rel="noopener">ig</a>
+    <a href="#contact">@</a>
+  </div>
+  <a href="#hero" class="back-top">↑</a>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Spotlight cursor ---------- */
+const spotlight = document.getElementById('spotlight');
+window.addEventListener('mousemove', e=>{
+  spotlight.style.setProperty('--mx', e.clientX+'px');
+  spotlight.style.setProperty('--my', e.clientY+'px');
+});
+
+/* ---------- Particle background canvas ---------- */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let w,h,particles=[];
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
+const colors=['#8b6bff','#4d8dff','#34e6d8'];
+for(let i=0;i<70;i++){
+  particles.push({
+    x:Math.random()*w,y:Math.random()*h,
+    r:Math.random()*1.6+0.4,
+    vx:(Math.random()-0.5)*0.15,
+    vy:(Math.random()-0.5)*0.15,
+    c:colors[Math.floor(Math.random()*colors.length)],
+    a:Math.random()*0.5+0.15
+  });
+}
+function drawParticles(){
+  ctx.clearRect(0,0,w,h);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=w;if(p.x>w)p.x=0;
+    if(p.y<0)p.y=h;if(p.y>h)p.y=0;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.c;
+    ctx.globalAlpha=p.a;
+    ctx.fill();
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ---------- Typing role animation ---------- */
+const roles=["DATA ANALYST","PYTHON DEVELOPER","POWER BI DEVELOPER","MIS EXECUTIVE"];
+const roleEl=document.getElementById('roleType');
+let ri=0,ci=0,deleting=false;
+function typeLoop(){
+  const current=roles[ri];
+  if(!deleting){
+    ci++;
+    roleEl.innerHTML=current.slice(0,ci)+'<span class="cursor-blink">|</span>';
+    if(ci===current.length){deleting=true;setTimeout(typeLoop,1400);return;}
+  }else{
+    ci--;
+    roleEl.innerHTML=current.slice(0,ci)+'<span class="cursor-blink">|</span>';
+    if(ci===0){deleting=false;ri=(ri+1)%roles.length;}
+  }
+  setTimeout(typeLoop, deleting?40:80);
+}
+typeLoop();
+
+/* ---------- Hero name entrance ---------- */
+gsap.from("#heroName", {opacity:0, y:50, duration:1.2, ease:"power4.out"});
+gsap.from(".hero-eyebrow, .quick-contact, .hero-desc, .hero-actions, .hero-stats", {
+  opacity:0, y:24, duration:1, stagger:0.12, delay:0.4, ease:"power3.out"
+});
+gsap.from("#orbitCard", {opacity:0, scale:0.85, duration:1.2, delay:0.5, ease:"power3.out"});
+
+/* ---------- Mouse-reactive tilt on orbit card ---------- */
+const orbitCard=document.getElementById('orbitCard');
+const heroVisual=document.querySelector('.hero-visual');
+if(heroVisual){
+  heroVisual.addEventListener('mousemove',e=>{
+    const r=heroVisual.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width-0.5;
+    const py=(e.clientY-r.top)/r.height-0.5;
+    gsap.to(orbitCard,{rotateY:px*18, rotateX:-py*18, duration:0.6, ease:"power2.out"});
+  });
+  heroVisual.addEventListener('mouseleave',()=>{
+    gsap.to(orbitCard,{rotateY:0,rotateX:0,duration:0.8,ease:"power3.out"});
+  });
+}
+
+/* orbiting mini orbs */
+gsap.to("#orb1",{rotation:360, transformOrigin:"210px 210px", duration:18, repeat:-1, ease:"none"});
+gsap.to("#orb2",{rotation:-360, transformOrigin:"160px 160px", duration:24, repeat:-1, ease:"none"});
+gsap.to("#orb3",{rotation:360, transformOrigin:"-40px 120px", duration:14, repeat:-1, ease:"none"});
+
+/* ---------- Skill pills tracks ---------- */
+const skillsRow1=["Python","SQL","Power BI","DAX","Power Query","Advanced Excel","EDA","ETL"];
+const skillsRow2=["Pandas","NumPy","BeautifulSoup","Data Cleaning","Dashboards","Web Scraping","MySQL","Matplotlib"];
+const skillsRow3=["TensorFlow","Keras","Feature Engineering","KPI Design","Row-Level Security","Statistics","Git","Excel VBA"];
+function buildTrack(id, arr){
+  const el=document.getElementById(id);
+  const doubled=[...arr,...arr];
+  el.innerHTML=doubled.map(s=>`<div class="skill-pill">${s}</div>`).join('');
+}
+buildTrack('track1',skillsRow1);
+buildTrack('track2',skillsRow2);
+buildTrack('track3',skillsRow3);
+
+/* ---------- Scroll reveals ---------- */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el,{
+    opacity:1, y:0, duration:0.9, ease:"power3.out",
+    scrollTrigger:{trigger:el, start:"top 88%"}
+  });
+});
+
+/* ---------- Timeline items ---------- */
+gsap.utils.toArray('.tl-item').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1, y:0, duration:0.8, ease:"power3.out",
+    scrollTrigger:{trigger:el, start:"top 85%"}
+  });
+});
+
+/* ---------- Project card 3D tilt ---------- */
+document.querySelectorAll('.proj-card').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const r=card.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width-0.5;
+    const py=(e.clientY-r.top)/r.height-0.5;
+    gsap.to(card,{rotateY:px*8, rotateX:-py*8, scale:1.02, duration:0.4, ease:"power2.out"});
+  });
+  card.addEventListener('mouseleave',()=>{
+    gsap.to(card,{rotateY:0,rotateX:0,scale:1,duration:0.6,ease:"power3.out"});
+  });
+});
+
+/* ---------- Bars chart animate on scroll ---------- */
+ScrollTrigger.create({
+  trigger:"#barsChart", start:"top 85%",
+  once:true,
+  onEnter:()=>{
+    document.querySelectorAll('#barsChart .bar').forEach(bar=>{
+      gsap.to(bar,{height:bar.dataset.h+'%', duration:1.2, ease:"power3.out"});
+    });
+  }
+});
+
+/* ---------- Donut chart animate ---------- */
+ScrollTrigger.create({
+  trigger:"#donutEl", start:"top 85%",
+  once:true,
+  onEnter:()=>{
+    gsap.to("#donutEl",{"--a1":"140deg","--a2":"252deg", duration:1.4, ease:"power2.out"});
+  }
+});
+ScrollTrigger.create({
+  trigger:"#donutEl2", start:"top 85%",
+  once:true,
+  onEnter:()=>{
+    gsap.to("#donutEl2",{"--a1":"162deg","--a2":"281deg", duration:1.4, ease:"power2.out"});
+  }
+});
+
+/* ---------- Line chart draw-in ---------- */
+ScrollTrigger.create({
+  trigger:"#lineChartSvg", start:"top 85%",
+  once:true,
+  onEnter:()=>{
+    gsap.to("#lineBefore",{strokeDashoffset:0, duration:1.6, ease:"power2.out"});
+    gsap.to("#lineAfter",{strokeDashoffset:0, duration:1.6, delay:0.3, ease:"power2.out"});
+  }
+});
+
+/* ---------- Counters ---------- */
+gsap.utils.toArray('.num').forEach(el=>{
+  const target=+el.dataset.count;
+  ScrollTrigger.create({
+    trigger:el, start:"top 90%", once:true,
+    onEnter:()=>{
+      let obj={val:0};
+      gsap.to(obj,{
+        val:target, duration:1.8, ease:"power2.out",
+        onUpdate:()=>{el.textContent=Math.floor(obj.val)+(target>=100?'':'');},
+      });
+    }
+  });
+});
+
+/* ---------- Document Vault (owner login + shared storage) ---------- */
+(function(){
+  const VAULT_USER = "varun";
+  const VAULT_PASS = "varun2026"; // change this before sharing the link — client-side only, not real security
+
+  const lockBtn=document.getElementById('lockBtn');
+  const lockLabel=document.getElementById('lockLabel');
+  const lockIcon=document.getElementById('lockIcon');
+  const loginPanel=document.getElementById('loginPanel');
+  const uploadPanel=document.getElementById('uploadPanel');
+  const loginSubmit=document.getElementById('loginSubmit');
+  const loginError=document.getElementById('loginError');
+  const fileInput=document.getElementById('fileInput');
+  const uploadStatus=document.getElementById('uploadStatus');
+  const docGrid=document.getElementById('docGrid');
+  const docEmpty=document.getElementById('docEmpty');
+
+  let unlocked=false;
+
+  lockBtn.addEventListener('click',()=>{
+    if(unlocked) return;
+    loginPanel.classList.toggle('open');
+  });
+
+  loginSubmit.addEventListener('click', doLogin);
+  document.getElementById('vaultPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+
+  function doLogin(){
+    const u=document.getElementById('vaultUser').value.trim();
+    const p=document.getElementById('vaultPass').value;
+    if(u===VAULT_USER && p===VAULT_PASS){
+      unlocked=true;
+      loginPanel.classList.remove('open');
+      uploadPanel.classList.add('open');
+      lockLabel.textContent='Unlocked';
+      lockIcon.textContent='🔓';
+      lockBtn.classList.add('unlocked');
+      loginError.textContent='';
+      renderDocs();
+    }else{
+      loginError.textContent='Incorrect username or password.';
+    }
+  }
+
+  async function getDocList(){
+    try{
+      const res=await window.storage.get('vault-doc-list', true);
+      return res && res.value ? JSON.parse(res.value) : [];
+    }catch(e){ return []; }
+  }
+  async function saveDocList(list){
+    try{ await window.storage.set('vault-doc-list', JSON.stringify(list), true); }catch(e){}
+  }
+
+  function iconFor(type){
+    if(type.includes('pdf')) return '📄';
+    if(type.includes('image')) return '🖼️';
+    if(type.includes('word') || type.includes('doc')) return '📝';
+    return '📁';
+  }
+  function fmtSize(bytes){
+    if(bytes<1024) return bytes+' B';
+    if(bytes<1024*1024) return (bytes/1024).toFixed(0)+' KB';
+    return (bytes/1024/1024).toFixed(1)+' MB';
+  }
+
+  async function renderDocs(){
+    const list=await getDocList();
+    docGrid.querySelectorAll('.doc-card').forEach(c=>c.remove());
+    if(list.length===0){ docEmpty.style.display='block'; return; }
+    docEmpty.style.display='none';
+    list.slice().reverse().forEach(doc=>{
+      const card=document.createElement('div');
+      card.className='doc-card';
+      card.innerHTML=`
+        <div class="doc-icon">${iconFor(doc.type||'')}</div>
+        <div>
+          <div class="doc-name">${doc.name}</div>
+          <div class="doc-meta">${fmtSize(doc.size)} · ${new Date(doc.uploadedAt).toLocaleDateString()}</div>
+        </div>
+        <div class="doc-actions">
+          <a href="#" class="doc-view" data-id="${doc.id}" data-name="${doc.name}">View / Download</a>
+          ${unlocked ? `<button class="doc-del" data-id="${doc.id}">Delete</button>` : ''}
+        </div>`;
+      docGrid.appendChild(card);
+    });
+
+    docGrid.querySelectorAll('.doc-view').forEach(a=>{
+      a.addEventListener('click', async e=>{
+        e.preventDefault();
+        try{
+          const res=await window.storage.get('vault-doc:'+a.dataset.id, true);
+          if(res && res.value){
+            const link=document.createElement('a');
+            link.href=res.value;
+            link.download=a.dataset.name;
+            link.click();
+          }
+        }catch(err){ alert('Could not load this file.'); }
+      });
+    });
+    docGrid.querySelectorAll('.doc-del').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const id=btn.dataset.id;
+        try{ await window.storage.delete('vault-doc:'+id, true); }catch(e){}
+        const list=await getDocList();
+        await saveDocList(list.filter(d=>d.id!==id));
+        renderDocs();
+      });
+    });
+  }
+
+  fileInput.addEventListener('change', async ()=>{
+    const files=Array.from(fileInput.files);
+    for(const file of files){
+      if(file.size > 4.5*1024*1024){
+        uploadStatus.textContent=`Skipped "${file.name}" — over 4.5MB limit.`;
+        continue;
+      }
+      uploadStatus.textContent=`Uploading ${file.name}...`;
+      const dataUrl=await new Promise((resolve,reject)=>{
+        const r=new FileReader();
+        r.onload=()=>resolve(r.result);
+        r.onerror=reject;
+        r.readAsDataURL(file);
+      });
+      const id='doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+      try{
+        await window.storage.set('vault-doc:'+id, dataUrl, true);
+        const list=await getDocList();
+        list.push({id, name:file.name, type:file.type, size:file.size, uploadedAt:Date.now()});
+        await saveDocList(list);
+      }catch(e){
+        uploadStatus.textContent=`Failed to upload ${file.name}.`;
+      }
+    }
+    uploadStatus.textContent='Upload complete.';
+    fileInput.value='';
+    renderDocs();
+  });
+
+  renderDocs();
+})();
+</script>
+</body>
+</html>
